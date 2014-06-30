@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -36,7 +37,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void loadSampleData() {
-        List<String> episodes1 = new ArrayList<String>();
+        /*List<String> episodes1 = new ArrayList<String>();
         episodes1.add("Episode 1");
         episodes1.add("Episode 2");
         episodes1.add("Episode 3");
@@ -45,31 +46,21 @@ public class MainActivity extends ActionBarActivity {
         List<String> episodes2 = new ArrayList<String>();
         episodes2.add("Episode 1");
         episodes2.add("Episode 2");
-        channels.put("Channel 2", episodes2);
-    }
+        channels.put("Channel 2", episodes2); */
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        for (int i = 0; i < 100; i++) {
+            List<String> episodes = new ArrayList<String>();
+            int rand = new Random().nextInt(8);
+            for (int j = 0; j < rand+1; j++) {
+                episodes.add("Episode " + i + "-" + j);
+            }
+            channels.put("Channel " + i, episodes);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     public class MyAdapter extends BaseAdapter {
         private final ArrayList mData;
+        private final int widthDay = 3000;
 
         public MyAdapter(HashMap<String, List<String>> channels) {
             mData = new ArrayList();
@@ -107,8 +98,14 @@ public class MainActivity extends ActionBarActivity {
 
             HashMap.Entry<String, List<String>> channel = getItem(position);
 
+            int episodeCount = channel.getValue().size();
+            int currentWidth = widthDay/episodeCount;
+
             for (String episode : channel.getValue()) {
                 Button tv = (Button) container.inflate(container.getContext(), R.layout.episode_button, null);
+                tv.setWidth(currentWidth);
+                //tv.setNextFocusDownId(R.id.layout_container);
+                //tv.setNextFocusUpId(R.id.layout_container);
                 tv.setText(episode);
                 container.addView(tv);
             }
